@@ -15,6 +15,7 @@ GitHub Contributions Widget for Notion - A Next.js 16 application that displays 
 - Loading states with skeleton animations
 - Error handling for 404 and API errors
 - Dynamic metadata for SEO and social sharing
+- Vercel Analytics for tracking page views and interactions
 
 ## Development Commands
 
@@ -124,13 +125,22 @@ Runs ESLint with Next.js-specific rules for TypeScript and Web Vitals.
 - Without token: 60 requests/hour per IP
 - Caching helps stay within limits
 
+## Analytics
+
+### Vercel Analytics
+- Installed via `@vercel/analytics` package
+- Added to `app/layout.tsx` as `<Analytics />` component
+- Privacy-friendly analytics without cookies
+- Automatically tracks page views and interactions when deployed to Vercel
+- No configuration needed for basic analytics
+
 ## Key Files
 
 - `next.config.ts` - Next.js configuration
 - `eslint.config.mjs` - ESLint flat config with Next.js presets
 - `tsconfig.json` - TypeScript compiler options with strict mode
 - `postcss.config.mjs` - PostCSS configuration for Tailwind CSS 4
-- `app/layout.tsx` - Root layout with metadata and font configuration
+- `app/layout.tsx` - Root layout with metadata, font configuration, and Vercel Analytics
 - `app/page.tsx` - Landing page component
 - `app/[username]/page.tsx` - Dynamic route for user contributions
 - `app/[username]/not-found.tsx` - Custom 404 page for invalid users
