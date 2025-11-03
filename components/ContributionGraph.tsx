@@ -77,92 +77,52 @@ export default function ContributionGraph({
 
   return (
     <div
-      className={`min-h-screen p-8 ${
+      className={`min-h-screen p-4 ${
         theme === 'light'
           ? 'bg-white text-gray-900'
           : 'bg-black text-gray-100'
       }`}
     >
-      <div className="mx-auto max-w-6xl">
-        {/* Header */}
-        <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-2xl font-bold">
-            {username}&apos;s Contributions
-          </h1>
-          <div
-            className={`text-sm ${
-              theme === 'light' ? 'text-gray-600' : 'text-gray-400'
-            }`}
-          >
-            {data.totalContributions} contributions in the last year
-          </div>
-        </div>
-
-        {/* Contribution Graph */}
-        <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-950">
-          <div className="inline-flex gap-1">
-            {data.weeks.map((week, weekIndex) => (
-              <div key={weekIndex} className="flex flex-col gap-1">
-                {week.contributionDays.map((day, dayIndex) => (
-                  <div
-                    key={dayIndex}
-                    className={`h-3 w-3 cursor-pointer rounded-sm transition-all hover:ring-2 hover:ring-gray-400 ${getColorClass(
-                      day.contributionCount
-                    )}`}
-                    onMouseEnter={(e) =>
-                      handleMouseEnter(day.date, day.contributionCount, e)
-                    }
-                    onMouseLeave={() => setHoveredDay(null)}
-                    title={`${day.contributionCount} contributions on ${formatDate(
-                      day.date
-                    )}`}
-                  />
-                ))}
-              </div>
-            ))}
-          </div>
-
-          {/* Legend */}
-          <div className="mt-4 flex items-center justify-end gap-2 text-xs">
-            <span
-              className={theme === 'light' ? 'text-gray-600' : 'text-gray-400'}
-            >
-              Less
-            </span>
-            {[0, 1, 2, 3, 4].map((level) => (
+      {/* Contribution Graph - No wrapper, no centering */}
+      <div className="inline-flex gap-1">
+        {data.weeks.map((week, weekIndex) => (
+          <div key={weekIndex} className="flex flex-col gap-1">
+            {week.contributionDays.map((day, dayIndex) => (
               <div
-                key={level}
-                className={`h-3 w-3 rounded-sm ${getColorClass(
-                  level === 0 ? 0 : level === 1 ? 2 : level === 2 ? 5 : level === 3 ? 8 : 12
+                key={dayIndex}
+                className={`h-3 w-3 cursor-pointer rounded-sm transition-all hover:ring-2 hover:ring-gray-400 ${getColorClass(
+                  day.contributionCount
+                )}`}
+                onMouseEnter={(e) =>
+                  handleMouseEnter(day.date, day.contributionCount, e)
+                }
+                onMouseLeave={() => setHoveredDay(null)}
+                title={`${day.contributionCount} contributions on ${formatDate(
+                  day.date
                 )}`}
               />
             ))}
-            <span
-              className={theme === 'light' ? 'text-gray-600' : 'text-gray-400'}
-            >
-              More
-            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* Tooltip */}
+      {hoveredDay && (
+        <div
+          className="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-full rounded bg-gray-900 px-3 py-2 text-xs text-white shadow-lg dark:bg-gray-100 dark:text-gray-900"
+          style={{
+            left: `${hoveredDay.x}px`,
+            top: `${hoveredDay.y - 8}px`,
+          }}
+        >
+          <div className="font-semibold">
+            {hoveredDay.count} {hoveredDay.count === 1 ? 'contribution' : 'contributions'}
+          </div>
+          <div className="text-gray-300 dark:text-gray-600">
+            {formatDate(hoveredDay.date)}
           </div>
         </div>
-
-        {/* Tooltip */}
-        {hoveredDay && (
-          <div
-            className="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-full rounded bg-gray-900 px-3 py-2 text-xs text-white shadow-lg dark:bg-gray-100 dark:text-gray-900"
-            style={{
-              left: `${hoveredDay.x}px`,
-              top: `${hoveredDay.y - 8}px`,
-            }}
-          >
-            <div className="font-semibold">
-              {hoveredDay.count} {hoveredDay.count === 1 ? 'contribution' : 'contributions'}
-            </div>
-            <div className="text-gray-300 dark:text-gray-600">
-              {formatDate(hoveredDay.date)}
-            </div>
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 }
