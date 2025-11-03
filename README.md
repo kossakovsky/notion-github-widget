@@ -85,6 +85,10 @@ cd notion-github-widget
 
 # Install dependencies
 npm install
+
+# Create environment file
+cp .env.example .env.local
+# Edit .env.local and add your GitHub token
 ```
 
 ### Available Scripts
@@ -266,18 +270,36 @@ notion-github-widget/
 
 ### Environment Variables
 
-No environment variables required! The widget works with GitHub's public API without authentication.
+**Required:**
+
+Create a `.env.local` file in the root directory:
+
+```bash
+GITHUB_TOKEN=your_github_personal_access_token
+```
+
+**How to get a GitHub token:**
+
+1. Go to [GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)](https://github.com/settings/tokens/new)
+2. Click "Generate new token (classic)"
+3. Give it a name (e.g., "Notion GitHub Widget")
+4. Select the following scope:
+   - ✅ `read:user` - Read user profile data
+5. Click "Generate token"
+6. Copy the token and add it to your `.env.local` file
+
+**Note:** Keep your token secure and never commit it to version control!
 
 **Optional for production:**
 - Vercel deployment automatically enables Analytics
-- No manual configuration needed
+- Add `GITHUB_TOKEN` to your Vercel environment variables
 
 ### GitHub API Rate Limits
 
-**Without Authentication:**
-- 60 requests per hour per IP
-- Sufficient with 1-hour caching
-- Shared across all users from same IP
+**With Authentication:**
+- 5,000 requests per hour
+- Sufficient for production use
+- Per-token limit
 
 **Caching Benefits:**
 - First request: Fetches from GitHub

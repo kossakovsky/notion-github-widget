@@ -26,12 +26,26 @@ const CONTRIBUTIONS_QUERY = `
 export async function fetchUserContributions(
   username: string
 ): Promise<GitHubAPIResponse> {
+  const token = process.env.GITHUB_TOKEN;
+  
+  if (!token) {
+    console.error('GITHUB_TOKEN is not set in environment variables');
+    return {
+      errors: [
+        {
+          message: 'GitHub API token is not configured. Please set GITHUB_TOKEN in your environment variables.',
+          type: 'CONFIG_ERROR',
+        },
+      ],
+    };
+  }
+
   try {
     const response = await fetch(GITHUB_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        // Using public API without authentication token
+        'Authorization': `Bearer ${token}`,
         'User-Agent': 'notion-github-widget',
       },
       body: JSON.stringify({
